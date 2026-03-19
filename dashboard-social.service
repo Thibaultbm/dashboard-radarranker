@@ -4,15 +4,14 @@ After=network.target
 
 [Service]
 Type=simple
-User=root
-WorkingDirectory=/opt/dashboard-social
+User=node
+WorkingDirectory=/data/.openclaw/workspace/dashboard-social
+EnvironmentFile=/data/.openclaw/workspace/dashboard-social/.env
 ExecStart=/usr/bin/node server.js
 Restart=always
 RestartSec=10
-Environment="PORT=3000"
-Environment="NOTION_API_KEY=${NOTION_API_KEY}"
-Environment="INSTAGRAM_ACCESS_TOKEN=${INSTAGRAM_ACCESS_TOKEN}"
-Environment="FETCH_TIME=0 6 * * *"
+StandardOutput=append:/var/log/dashboard-social.log
+StandardError=append:/var/log/dashboard-social.log
 
 [Install]
 WantedBy=multi-user.target

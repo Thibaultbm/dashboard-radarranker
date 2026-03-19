@@ -816,9 +816,13 @@ function setupTabs() {
     const tabContents = document.querySelectorAll('.tab-content');
     const periodFilter = document.querySelector('.period-filter');
     
+    console.log('setupTabs() called. Found buttons:', tabBtns.length, 'Found contents:', tabContents.length);
+    
     tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
             const tabId = btn.dataset.tab;
+            console.log('Tab clicked:', tabId);
             
             // Update active button
             tabBtns.forEach(b => b.classList.remove('active'));
@@ -828,6 +832,7 @@ function setupTabs() {
             tabContents.forEach(content => {
                 content.classList.remove('active');
                 if (content.id === `tab-${tabId}`) {
+                    console.log('Activating:', content.id);
                     content.classList.add('active');
                 }
             });

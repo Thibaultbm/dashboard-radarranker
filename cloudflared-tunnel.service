@@ -1,13 +1,17 @@
 [Unit]
 Description=Cloudflare Tunnel for Dashboard Social
 After=network.target
+Wants=dashboard-social.service
 
 [Service]
 Type=simple
 User=root
-ExecStart=/usr/local/bin/cloudflared tunnel run --token eyJhIjoiOWQzYzQ4ZTY0NjgzZDc5OTY4N2ZjMzQxOTM4MTA5MTYiLCJ0IjoiZmM0ZDRiZjQtYzE1OS00NjIyLWEyZjMtMzg1M2YwNjBiYzBhIiwicyI6Ill6UmpZekUwWVRVdE9XVmtOaTAwT0RnMUxUbG1aV1V0WVdZNE16YzVOalkzTlRJdyJ9
+WorkingDirectory=/data/.openclaw/workspace/dashboard-social/cloudflared-config
+ExecStart=/home/linuxbrew/.linuxbrew/bin/cloudflared tunnel --config config.yml run
 Restart=always
 RestartSec=10
+StandardOutput=append:/var/log/cloudflared-tunnel.log
+StandardError=append:/var/log/cloudflared-tunnel.log
 
 [Install]
 WantedBy=multi-user.target
