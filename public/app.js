@@ -816,7 +816,7 @@ function setupTabs() {
     const tabContents = document.querySelectorAll('.tab-content');
     const periodFilter = document.querySelector('.period-filter');
     
-    console.log('setupTabs() called. Found buttons:', tabBtns.length, 'Found contents:', tabContents.length);
+    console.warn('setupTabs(). Found buttons:', tabBtns.length, 'Found contents:', tabContents.length);
     
     tabBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
