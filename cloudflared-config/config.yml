@@ -1,0 +1,7 @@
+tunnel: dashboard-social-radarranker
+credentials-file: /data/.openclaw/workspace/dashboard-social/cloudflared-config/credentials.json
+
+ingress:
+  - hostname: dashboard.radarranker.com
+    service: http://localhost:3456
+  - service: http_status:404

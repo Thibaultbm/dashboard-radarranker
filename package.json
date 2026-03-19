@@ -1,0 +1,19 @@
+{
+  "name": "dashboard-social",
+  "version": "1.0.0",
+  "description": "Dashboard pour suivre les statistiques Instagram",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "fetch": "node scripts/fetch-data.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^2.7.0",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

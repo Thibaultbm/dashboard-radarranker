@@ -1,0 +1,18 @@
+[Unit]
+Description=Dashboard Social - Instagram Analytics
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/dashboard-social
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=10
+Environment="PORT=3000"
+Environment="NOTION_API_KEY=${NOTION_API_KEY}"
+Environment="INSTAGRAM_ACCESS_TOKEN=${INSTAGRAM_ACCESS_TOKEN}"
+Environment="FETCH_TIME=0 6 * * *"
+
+[Install]
+WantedBy=multi-user.target

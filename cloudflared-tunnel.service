@@ -1,0 +1,13 @@
+[Unit]
+Description=Cloudflare Tunnel for Dashboard Social
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/cloudflared tunnel run --token eyJhIjoiOWQzYzQ4ZTY0NjgzZDc5OTY4N2ZjMzQxOTM4MTA5MTYiLCJ0IjoiZmM0ZDRiZjQtYzE1OS00NjIyLWEyZjMtMzg1M2YwNjBiYzBhIiwicyI6Ill6UmpZekUwWVRVdE9XVmtOaTAwT0RnMUxUbG1aV1V0WVdZNE16YzVOalkzTlRJdyJ9
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
