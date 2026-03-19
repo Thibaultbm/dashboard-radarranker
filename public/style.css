@@ -980,8 +980,29 @@ header h1 svg {
 
 .content-grid-gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+@media (max-width: 1200px) {
+    .content-grid-gallery {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .content-grid-gallery {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.content-grid-gallery .content-placeholder {
+    grid-column: 1 / -1;
+}
+
+/* Container externe des posts — simple bloc, pas de grid */
+.posts-outer-container {
+    display: block;
 }
 
 .content-placeholder {
