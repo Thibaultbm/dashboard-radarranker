@@ -891,78 +891,82 @@ function renderWorkflow(workflowId) {
     if (!workflow) return;
     
     const canvas = document.getElementById('workflowCanvas');
-    const svgNS = 'http://www.w3.org/2000/svg';
+    if (!canvas) return;
     
     // Clear previous content
     canvas.innerHTML = '';
     
-    // Create SVG for connections
+    // Create container for absolute positioning
+    const container = document.createElement('div');
+    container.style.position = 'relative';
+    container.style.width = '100%';
+    container.style.height = '350px';
+    container.style.minWidth = '800px';
+    
+    // Create SVG for connections (overlay on top)
+    const svgNS = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(svgNS, 'svg');
     svg.setAttribute('class', 'workflow-svg');
-    svg.setAttribute('viewBox', '0 0 800 400');
-    svg.setAttribute('preserveAspectRatio', 'xMinYMid meet');
-    svg.setAttribute('style', 'background: transparent;');
+    svg.setAttribute('viewBox', '0 0 800 350');
+    svg.setAttribute('preserveAspectRatio', 'none');
+    svg.setAttribute('style', 'position: absolute; top: 0; left: 0; width: 100%; height: 100%;');
+    svg.setAttribute('width', '800');
+    svg.setAttribute('height', '350');
     
-    // Draw edges first (so they appear behind nodes)
+    // Add arrow marker definition
+    const defs = document.createElementNS(svgNS, 'defs');
+    const marker = document.createElementNS(svgNS, 'marker');
+    marker.setAttribute('id', 'arrowhead');
+    marker.setAttribute('markerWidth', '10');
+    marker.setAttribute('markerHeight', '10');
+    marker.setAttribute('refX', '9');
+    marker.setAttribute('refY', '3');
+    marker.setAttribute('orient', 'auto');
+    const polygon = document.createElementNS(svgNS, 'polygon');
+    polygon.setAttribute('points', '0 0, 10 3, 0 6');
+    polygon.setAttribute('fill', '#60a5fa');
+    marker.appendChild(polygon);
+    defs.appendChild(marker);
+    svg.appendChild(defs);
+    
+    // Draw edges
     workflow.edges.forEach(edge => {
         const fromNode = workflow.nodes.find(n => n.id === edge.from);
         const toNode = workflow.nodes.find(n => n.id === edge.to);
         
         if (fromNode && toNode) {
-            const x1 = fromNode.x + 50; // node width/2
-            const y1 = fromNode.y + 20; // node height/2
-            const x2 = toNode.x + 50;
-            const y2 = toNode.y + 20;
+            const x1 = fromNode.x + 60;
+            const y1 = fromNode.y + 25;
+            const x2 = toNode.x + 20;
+            const y2 = toNode.y + 25;
             
-            // Line
             const line = document.createElementNS(svgNS, 'line');
             line.setAttribute('x1', x1);
             line.setAttribute('y1', y1);
             line.setAttribute('x2', x2);
             line.setAttribute('y2', y2);
-            line.setAttribute('stroke', '#30363d');
+            line.setAttribute('stroke', '#60a5fa');
             line.setAttribute('stroke-width', '2');
             line.setAttribute('marker-end', 'url(#arrowhead)');
             svg.appendChild(line);
-            
-            // Arrow marker definition
-            if (!document.querySelector('#arrowhead')) {
-                const defs = document.createElementNS(svgNS, 'defs');
-                const marker = document.createElementNS(svgNS, 'marker');
-                marker.setAttribute('id', 'arrowhead');
-                marker.setAttribute('markerWidth', '10');
-                marker.setAttribute('markerHeight', '10');
-                marker.setAttribute('refX', '8');
-                marker.setAttribute('refY', '3');
-                marker.setAttribute('orient', 'auto');
-                const polygon = document.createElementNS(svgNS, 'polygon');
-                polygon.setAttribute('points', '0 0, 10 3, 0 6');
-                polygon.setAttribute('fill', '#30363d');
-                marker.appendChild(polygon);
-                defs.appendChild(marker);
-                svg.appendChild(defs);
-            }
         }
     });
     
-    canvas.appendChild(svg);
+    container.appendChild(svg);
     
     // Create node elements
-    const nodesContainer = document.createElement('div');
-    nodesContainer.style.position = 'relative';
-    nodesContainer.style.width = '100%';
-    nodesContainer.style.height = '300px';
-    
     workflow.nodes.forEach(node => {
         const nodeEl = document.createElement('div');
         nodeEl.className = `workflow-node ${node.color}`;
         nodeEl.textContent = node.label;
+        nodeEl.style.position = 'absolute';
         nodeEl.style.left = node.x + 'px';
         nodeEl.style.top = node.y + 'px';
-        nodesContainer.appendChild(nodeEl);
+        nodeEl.style.zIndex = '10';
+        container.appendChild(nodeEl);
     });
     
-    canvas.appendChild(nodesContainer);
+    canvas.appendChild(container);
 }
 
 function setupWorkflows() {
