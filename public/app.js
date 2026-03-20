@@ -810,6 +810,177 @@ async function fetchContentData() {
     document.getElementById('youtubeVideos').textContent = '0';
 }
 
+// Workflow data structure
+const workflows = {
+    seo: {
+        name: 'SEO & Newsletter',
+        nodes: [
+            { id: 'sorank', label: 'SORANK', color: 'blue', x: 50, y: 150 },
+            { id: 'clients', label: 'Clients', color: 'gray', x: 200, y: 150 },
+            { id: 'newsletter', label: 'Newsletter', color: 'blue', x: 350, y: 150 },
+            { id: 'make', label: 'MAKE', color: 'purple', x: 500, y: 150 },
+            { id: 'brevo', label: 'BREVO', color: 'green', x: 650, y: 150 }
+        ],
+        edges: [
+            { from: 'sorank', to: 'clients' },
+            { from: 'clients', to: 'newsletter' },
+            { from: 'newsletter', to: 'make' },
+            { from: 'make', to: 'brevo' }
+        ]
+    },
+    instagram: {
+        name: 'Instagram & Malala',
+        nodes: [
+            { id: 'ig', label: 'INSTAGRAM', color: 'orange', x: 50, y: 150 },
+            { id: 'malala', label: 'Malala', color: 'blue', x: 200, y: 150 },
+            { id: 'manychat', label: 'ManyChat', color: 'purple', x: 350, y: 150 },
+            { id: 'whatsapp', label: 'WhatsApp', color: 'green', x: 500, y: 150 }
+        ],
+        edges: [
+            { from: 'ig', to: 'malala' },
+            { from: 'malala', to: 'manychat' },
+            { from: 'manychat', to: 'whatsapp' }
+        ]
+    },
+    linkedin: {
+        name: 'LinkedIn',
+        nodes: [
+            { id: 'content', label: 'Content Creation', color: 'blue', x: 50, y: 150 },
+            { id: 'linkedin', label: 'LINKEDIN', color: 'blue', x: 250, y: 150 },
+            { id: 'engagement', label: 'Engagement & Replies', color: 'orange', x: 450, y: 150 }
+        ],
+        edges: [
+            { from: 'content', to: 'linkedin' },
+            { from: 'linkedin', to: 'engagement' }
+        ]
+    },
+    coldmail: {
+        name: 'Cold Mailing',
+        nodes: [
+            { id: 'targets', label: 'Target Prospects', color: 'gray', x: 50, y: 150 },
+            { id: 'kassi', label: 'Kassi', color: 'blue', x: 200, y: 150 },
+            { id: 'email', label: 'Email Outreach', color: 'orange', x: 350, y: 150 },
+            { id: 'followup', label: 'Follow-up Sequence', color: 'purple', x: 500, y: 150 }
+        ],
+        edges: [
+            { from: 'targets', to: 'kassi' },
+            { from: 'kassi', to: 'email' },
+            { from: 'email', to: 'followup' }
+        ]
+    },
+    paiements: {
+        name: 'Paiements & Stripe',
+        nodes: [
+            { id: 'clients', label: 'Clients Sorank', color: 'gray', x: 50, y: 150 },
+            { id: 'stripe', label: 'STRIPE', color: 'blue', x: 200, y: 150 },
+            { id: 'invoicing', label: 'Invoicing System', color: 'green', x: 350, y: 150 },
+            { id: 'accounting', label: 'Accounting (Brevo)', color: 'purple', x: 500, y: 150 }
+        ],
+        edges: [
+            { from: 'clients', to: 'stripe' },
+            { from: 'stripe', to: 'invoicing' },
+            { from: 'invoicing', to: 'accounting' }
+        ]
+    }
+};
+
+let currentWorkflow = 'seo';
+
+function renderWorkflow(workflowId) {
+    const workflow = workflows[workflowId];
+    if (!workflow) return;
+    
+    const canvas = document.getElementById('workflowCanvas');
+    const svgNS = 'http://www.w3.org/2000/svg';
+    
+    // Clear previous content
+    canvas.innerHTML = '';
+    
+    // Create SVG for connections
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('class', 'workflow-svg');
+    svg.setAttribute('viewBox', '0 0 800 400');
+    svg.setAttribute('preserveAspectRatio', 'xMinYMid meet');
+    svg.setAttribute('style', 'background: transparent;');
+    
+    // Draw edges first (so they appear behind nodes)
+    workflow.edges.forEach(edge => {
+        const fromNode = workflow.nodes.find(n => n.id === edge.from);
+        const toNode = workflow.nodes.find(n => n.id === edge.to);
+        
+        if (fromNode && toNode) {
+            const x1 = fromNode.x + 50; // node width/2
+            const y1 = fromNode.y + 20; // node height/2
+            const x2 = toNode.x + 50;
+            const y2 = toNode.y + 20;
+            
+            // Line
+            const line = document.createElementNS(svgNS, 'line');
+            line.setAttribute('x1', x1);
+            line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2);
+            line.setAttribute('y2', y2);
+            line.setAttribute('stroke', '#30363d');
+            line.setAttribute('stroke-width', '2');
+            line.setAttribute('marker-end', 'url(#arrowhead)');
+            svg.appendChild(line);
+            
+            // Arrow marker definition
+            if (!document.querySelector('#arrowhead')) {
+                const defs = document.createElementNS(svgNS, 'defs');
+                const marker = document.createElementNS(svgNS, 'marker');
+                marker.setAttribute('id', 'arrowhead');
+                marker.setAttribute('markerWidth', '10');
+                marker.setAttribute('markerHeight', '10');
+                marker.setAttribute('refX', '8');
+                marker.setAttribute('refY', '3');
+                marker.setAttribute('orient', 'auto');
+                const polygon = document.createElementNS(svgNS, 'polygon');
+                polygon.setAttribute('points', '0 0, 10 3, 0 6');
+                polygon.setAttribute('fill', '#30363d');
+                marker.appendChild(polygon);
+                defs.appendChild(marker);
+                svg.appendChild(defs);
+            }
+        }
+    });
+    
+    canvas.appendChild(svg);
+    
+    // Create node elements
+    const nodesContainer = document.createElement('div');
+    nodesContainer.style.position = 'relative';
+    nodesContainer.style.width = '100%';
+    nodesContainer.style.height = '300px';
+    
+    workflow.nodes.forEach(node => {
+        const nodeEl = document.createElement('div');
+        nodeEl.className = `workflow-node ${node.color}`;
+        nodeEl.textContent = node.label;
+        nodeEl.style.left = node.x + 'px';
+        nodeEl.style.top = node.y + 'px';
+        nodesContainer.appendChild(nodeEl);
+    });
+    
+    canvas.appendChild(nodesContainer);
+}
+
+function setupWorkflows() {
+    const workflowBtns = document.querySelectorAll('.workflow-btn');
+    workflowBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const workflowId = btn.dataset.workflow;
+            workflowBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentWorkflow = workflowId;
+            renderWorkflow(workflowId);
+        });
+    });
+    
+    // Render initial workflow
+    renderWorkflow(currentWorkflow);
+}
+
 // Tab navigation
 function setupTabs() {
     const tabBtns = document.querySelectorAll('.tab-btn');
@@ -850,6 +1021,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCharts();
     setupPeriodFilters();
     setupTabs();
+    setupWorkflows();
     fetchData();
     fetchProductivityData();
     fetchContentData();

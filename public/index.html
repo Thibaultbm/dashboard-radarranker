@@ -24,6 +24,7 @@
                     <button class="tab-btn active" data-tab="social">Social</button>
                     <button class="tab-btn" data-tab="productivity">Productivité</button>
                     <button class="tab-btn" data-tab="content">Contenu</button>
+                    <button class="tab-btn" data-tab="workflows">Workflows</button>
                 </nav>
                 <button id="refreshBtn" class="btn btn-primary">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -330,6 +331,32 @@
                     <div class="content-placeholder">
                         <p>La galerie de contenu sera bientôt disponible</p>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Workflows -->
+        <div id="tab-workflows" class="tab-content">
+            <div class="section-header">
+                <h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    WORKFLOWS OPÉRATIONNELS
+                </h2>
+            </div>
+            
+            <div class="workflows-container">
+                <div class="workflow-selector">
+                    <button class="workflow-btn active" data-workflow="seo">SEO & Newsletter</button>
+                    <button class="workflow-btn" data-workflow="instagram">Instagram & Malala</button>
+                    <button class="workflow-btn" data-workflow="linkedin">LinkedIn</button>
+                    <button class="workflow-btn" data-workflow="coldmail">Cold Mailing</button>
+                    <button class="workflow-btn" data-workflow="paiements">Paiements & Stripe</button>
+                </div>
+                
+                <div class="workflow-canvas" id="workflowCanvas">
+                    <!-- Workflows will be rendered here by JavaScript -->
                 </div>
             </div>
         </div>
