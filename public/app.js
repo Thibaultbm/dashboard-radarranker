@@ -810,77 +810,42 @@ async function fetchContentData() {
     document.getElementById('youtubeVideos').textContent = '0';
 }
 
-// Workflow data structure
+// Workflow data structure (for Mermaid diagrams)
 const workflows = {
     seo: {
         name: 'SEO & Newsletter',
-        nodes: [
-            { id: 'sorank', label: 'SORANK', color: 'blue', x: 50, y: 150 },
-            { id: 'clients', label: 'Clients', color: 'gray', x: 200, y: 150 },
-            { id: 'newsletter', label: 'Newsletter', color: 'blue', x: 350, y: 150 },
-            { id: 'make', label: 'MAKE', color: 'purple', x: 500, y: 150 },
-            { id: 'brevo', label: 'BREVO', color: 'green', x: 650, y: 150 }
-        ],
-        edges: [
-            { from: 'sorank', to: 'clients' },
-            { from: 'clients', to: 'newsletter' },
-            { from: 'newsletter', to: 'make' },
-            { from: 'make', to: 'brevo' }
-        ]
+        diagram: `graph LR
+            A["SORANK<br/><small>SEO Tool</small>"]:::blue --> B["Clients<br/><small>User Base</small>"]:::gray
+            B --> C["Newsletter<br/><small>Content</small>"]:::blue
+            C --> D["MAKE<br/><small>Automation</small>"]:::purple
+            D --> E["BREVO<br/><small>Email Dispatch</small>"]:::green`
     },
     instagram: {
         name: 'Instagram & Malala',
-        nodes: [
-            { id: 'ig', label: 'INSTAGRAM', color: 'orange', x: 50, y: 150 },
-            { id: 'malala', label: 'Malala', color: 'blue', x: 200, y: 150 },
-            { id: 'manychat', label: 'ManyChat', color: 'purple', x: 350, y: 150 },
-            { id: 'whatsapp', label: 'WhatsApp', color: 'green', x: 500, y: 150 }
-        ],
-        edges: [
-            { from: 'ig', to: 'malala' },
-            { from: 'malala', to: 'manychat' },
-            { from: 'manychat', to: 'whatsapp' }
-        ]
+        diagram: `graph LR
+            A["INSTAGRAM<br/><small>Content Source</small>"]:::orange --> B["Malala<br/><small>Social Manager</small>"]:::blue
+            B --> C["ManyChat<br/><small>Chatbot</small>"]:::purple
+            C --> D["WhatsApp<br/><small>Direct Messages</small>"]:::green`
     },
     linkedin: {
         name: 'LinkedIn',
-        nodes: [
-            { id: 'content', label: 'Content Creation', color: 'blue', x: 50, y: 150 },
-            { id: 'linkedin', label: 'LINKEDIN', color: 'blue', x: 250, y: 150 },
-            { id: 'engagement', label: 'Engagement & Replies', color: 'orange', x: 450, y: 150 }
-        ],
-        edges: [
-            { from: 'content', to: 'linkedin' },
-            { from: 'linkedin', to: 'engagement' }
-        ]
+        diagram: `graph LR
+            A["Content<br/><small>Creation</small>"]:::blue --> B["LINKEDIN<br/><small>Publishing</small>"]:::blue
+            B --> C["Engagement<br/><small>& Replies</small>"]:::orange`
     },
     coldmail: {
         name: 'Cold Mailing',
-        nodes: [
-            { id: 'targets', label: 'Target Prospects', color: 'gray', x: 50, y: 150 },
-            { id: 'kassi', label: 'Kassi', color: 'blue', x: 200, y: 150 },
-            { id: 'email', label: 'Email Outreach', color: 'orange', x: 350, y: 150 },
-            { id: 'followup', label: 'Follow-up Sequence', color: 'purple', x: 500, y: 150 }
-        ],
-        edges: [
-            { from: 'targets', to: 'kassi' },
-            { from: 'kassi', to: 'email' },
-            { from: 'email', to: 'followup' }
-        ]
+        diagram: `graph LR
+            A["Target<br/><small>Prospects</small>"]:::gray --> B["Kassi<br/><small>Prospection</small>"]:::blue
+            B --> C["Email<br/><small>Outreach</small>"]:::orange
+            C --> D["Follow-up<br/><small>Sequence</small>"]:::purple`
     },
     paiements: {
         name: 'Paiements & Stripe',
-        nodes: [
-            { id: 'clients', label: 'Clients Sorank', color: 'gray', x: 50, y: 150 },
-            { id: 'stripe', label: 'STRIPE', color: 'blue', x: 200, y: 150 },
-            { id: 'invoicing', label: 'Invoicing System', color: 'green', x: 350, y: 150 },
-            { id: 'accounting', label: 'Accounting (Brevo)', color: 'purple', x: 500, y: 150 }
-        ],
-        edges: [
-            { from: 'clients', to: 'stripe' },
-            { from: 'stripe', to: 'invoicing' },
-            { from: 'invoicing', to: 'accounting' }
-        ]
+        diagram: `graph LR
+            A["Clients<br/><small>Sorank Users</small>"]:::gray --> B["STRIPE<br/><small>Payment Gateway</small>"]:::blue
+            B --> C["Invoicing<br/><small>System</small>"]:::green
+            C --> D["Accounting<br/><small>(Brevo)</small>"]:::purple`
     }
 };
 
@@ -896,77 +861,15 @@ function renderWorkflow(workflowId) {
     // Clear previous content
     canvas.innerHTML = '';
     
-    // Create container for absolute positioning
-    const container = document.createElement('div');
-    container.style.position = 'relative';
-    container.style.width = '100%';
-    container.style.height = '350px';
-    container.style.minWidth = '800px';
+    // Create mermaid diagram div
+    const diagramDiv = document.createElement('div');
+    diagramDiv.className = 'mermaid';
+    diagramDiv.textContent = workflow.diagram;
     
-    // Create SVG for connections (overlay on top)
-    const svgNS = 'http://www.w3.org/2000/svg';
-    const svg = document.createElementNS(svgNS, 'svg');
-    svg.setAttribute('class', 'workflow-svg');
-    svg.setAttribute('viewBox', '0 0 800 350');
-    svg.setAttribute('preserveAspectRatio', 'none');
-    svg.setAttribute('style', 'position: absolute; top: 0; left: 0; width: 100%; height: 100%;');
-    svg.setAttribute('width', '800');
-    svg.setAttribute('height', '350');
+    canvas.appendChild(diagramDiv);
     
-    // Add arrow marker definition
-    const defs = document.createElementNS(svgNS, 'defs');
-    const marker = document.createElementNS(svgNS, 'marker');
-    marker.setAttribute('id', 'arrowhead');
-    marker.setAttribute('markerWidth', '10');
-    marker.setAttribute('markerHeight', '10');
-    marker.setAttribute('refX', '9');
-    marker.setAttribute('refY', '3');
-    marker.setAttribute('orient', 'auto');
-    const polygon = document.createElementNS(svgNS, 'polygon');
-    polygon.setAttribute('points', '0 0, 10 3, 0 6');
-    polygon.setAttribute('fill', '#60a5fa');
-    marker.appendChild(polygon);
-    defs.appendChild(marker);
-    svg.appendChild(defs);
-    
-    // Draw edges
-    workflow.edges.forEach(edge => {
-        const fromNode = workflow.nodes.find(n => n.id === edge.from);
-        const toNode = workflow.nodes.find(n => n.id === edge.to);
-        
-        if (fromNode && toNode) {
-            const x1 = fromNode.x + 60;
-            const y1 = fromNode.y + 25;
-            const x2 = toNode.x + 20;
-            const y2 = toNode.y + 25;
-            
-            const line = document.createElementNS(svgNS, 'line');
-            line.setAttribute('x1', x1);
-            line.setAttribute('y1', y1);
-            line.setAttribute('x2', x2);
-            line.setAttribute('y2', y2);
-            line.setAttribute('stroke', '#60a5fa');
-            line.setAttribute('stroke-width', '2');
-            line.setAttribute('marker-end', 'url(#arrowhead)');
-            svg.appendChild(line);
-        }
-    });
-    
-    container.appendChild(svg);
-    
-    // Create node elements
-    workflow.nodes.forEach(node => {
-        const nodeEl = document.createElement('div');
-        nodeEl.className = `workflow-node ${node.color}`;
-        nodeEl.textContent = node.label;
-        nodeEl.style.position = 'absolute';
-        nodeEl.style.left = node.x + 'px';
-        nodeEl.style.top = node.y + 'px';
-        nodeEl.style.zIndex = '10';
-        container.appendChild(nodeEl);
-    });
-    
-    canvas.appendChild(container);
+    // Initialize Mermaid for this diagram
+    mermaid.contentLoaded();
 }
 
 function setupWorkflows() {
@@ -1019,6 +922,17 @@ function setupTabs() {
         });
     });
 }
+
+// Initialize Mermaid
+mermaid.initialize({ 
+    startOnLoad: true,
+    theme: 'dark',
+    flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'linear'
+    }
+});
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {

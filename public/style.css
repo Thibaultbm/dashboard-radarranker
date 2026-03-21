@@ -1173,3 +1173,74 @@ header h1 svg {
 .workflow-node.gray {
     background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
 }
+
+/* Mermaid Diagram Styles */
+.workflow-canvas .mermaid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    background: var(--bg-card);
+}
+
+.workflow-canvas .mermaid svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Mermaid node colors */
+.mermaid .blue {
+    fill: #3b82f6 !important;
+    stroke: #1e40af !important;
+    stroke-width: 2px;
+    color: white !important;
+}
+
+.mermaid .green {
+    fill: #22c55e !important;
+    stroke: #15803d !important;
+    stroke-width: 2px;
+    color: white !important;
+}
+
+.mermaid .purple {
+    fill: #a855f7 !important;
+    stroke: #6b21a8 !important;
+    stroke-width: 2px;
+    color: white !important;
+}
+
+.mermaid .orange {
+    fill: #f97316 !important;
+    stroke: #c2410c !important;
+    stroke-width: 2px;
+    color: white !important;
+}
+
+.mermaid .gray {
+    fill: #6b7280 !important;
+    stroke: #374151 !important;
+    stroke-width: 2px;
+    color: white !important;
+}
+
+/* Mermaid text styling */
+.mermaid .flowchart-label tspan {
+    fill: white !important;
+    font-weight: 600;
+}
+
+.mermaid .flowchart-label {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px;
+}
+
+.mermaid .edgeLabel {
+    background: var(--bg-card);
+}
+
+/* Arrow styling */
+.mermaid .flowchart-link {
+    stroke: #60a5fa;
+    stroke-width: 2;
+}
