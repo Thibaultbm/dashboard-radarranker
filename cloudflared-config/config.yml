@@ -3,5 +3,5 @@ credentials-file: /data/.openclaw/workspace/dashboard-social/cloudflared-config/
 
 ingress:
   - hostname: dashboard.radarranker.com
-    service: http://localhost:3000
+    service: http://172.18.0.2:3000
   - service: http_status:404
